@@ -1,0 +1,108 @@
+<div class="item" data-tipo="anime" onclick="abrirVideo('https://animesonline.nz/pesquisa/?s=Nome+Do+Anime')">🎌 Nome do Anime — Assistir Completo</div>
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo das Séries — Assistir Completo</title>
+    <style>
+        *{margin:0; padding:0; box-sizing:border-box; font-family:sans-serif;}
+        body{background:#121212; color:white;}
+        header{background:#e63946; padding:15px; text-align:center; font-size:22px; font-weight:bold;}
+        .pesquisa{padding:15px; text-align:center; background:#1e1e1e;}
+        input{width:90%; padding:12px; font-size:16px; border-radius:25px; border:none; outline:none; background:#333; color:white;}
+        .categorias{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; padding:15px;}
+        .cat{padding:10px 20px; background:#e63946; border-radius:20px; cursor:pointer; font-size:15px;}
+        .cat.ativo{background:#ff5252;}
+        .lista{padding:15px;}
+        .item{background:#1e1e1e; margin:8px 0; padding:15px; border-radius:10px; cursor:pointer; border-left:4px solid #e63946;}
+        .item:hover{background:#2d2d2d;}
+        .esconder{display:none;}
+        .reprodutor{position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:100; display:none;}
+        .cabecaVideo{background:#e63946; padding:10px; text-align:right;}
+        .fechar{font-size:28px; color:white; cursor:pointer; padding:5px 15px;}
+        iframe{width:100%; height:calc(100% - 50px); border:none;}
+        .aviso{font-size:12px; color:#aaa; padding:8px; text-align:center; background:#222;}
+    </style>
+</head>
+<body>
+
+<header>🎬 Mundo das Séries — Completo</header>
+
+<div class="pesquisa">
+    <input type="text" id="busca" placeholder="🔍 Pesquisar anime, filme, novela...">
+</div>
+
+<div class="categorias">
+    <div class="cat ativo" onclick="mostrarTudo()">Todos</div>
+    <div class="cat" onclick="filtrar('anime')">Animes</div>
+    <div class="cat" onclick="filtrar('filme')">Filmes</div>
+    <div class="cat" onclick="filtrar('novela')">Novelas</div>
+    <div class="cat" onclick="filtrar('dorama')">Doramas</div>
+</div>
+
+<div class="aviso">💡 Ao tocar, abre direto para assistir completo!</div>
+
+<div class="lista" id="lista">
+    <!-- ANIMES -->
+    <div class="item" data-tipo="anime" onclick="abrirVideo('https://animesonline.nz/pesquisa/?s=Naruto')">🎌 Naruto — Assistir Completo</div>
+    <div class="item" data-tipo="anime" onclick="abrirVideo('https://animesonline.nz/pesquisa/?s=Dragon+Ball')">🎌 Dragon Ball — Assistir Completo</div>
+    <div class="item" data-tipo="anime" onclick="abrirVideo('https://animesonline.nz/pesquisa/?s=One+Piece')">🎌 One Piece — Assistir Completo</div>
+    <div class="item" data-tipo="anime" onclick="abrirVideo('https://animesonline.nz/pesquisa/?s=Ataque+dos+Titas')">🎌 Ataque dos Titãs — Completo</div>
+    <div class="item" data-tipo="anime" onclick="abrirVideo('https://animesonline.nz/pesquisa/?s=Demon+Slayer')">🎌 Caçador de Demônios — Completo</div>
+    <div class="item" data-tipo="anime" onclick="abrirVideo('https://animesonline.nz/pesquisa/?s=Jujutsu+Kaisen')">🎌 Jujutsu Kaisen — Completo</div>
+    <div class="item" data-tipo="anime" onclick="abrirVideo('https://animesonline.nz/pesquisa/?s=Tokyo+Revengers')">🎌 Tokyo Revengers — Completo</div>
+
+    <!-- FILMES -->
+    <div class="item" data-tipo="filme" onclick="abrirVideo('https://www.filmesonline.com.br/busca?q=filme+completo+dublado')">🎬 Filmes — Assistir Completo</div>
+    
+    <!-- NOVELAS -->
+    <div class="item" data-tipo="novela" onclick="abrirVideo('https://novelasgratis.com/pesquisa?q=novela+completa')">📖 Novelas Completas</div>
+    
+    <!-- DORAMAS -->
+    <div class="item" data-tipo="dorama" onclick="abrirVideo('https://doramasbr.cc/pesquisa/?s=dorama+completo')">💜 Doramas Completos</div>
+</div>
+
+<div class="reprodutor" id="telaVideo">
+    <div class="cabecaVideo">
+        <span class="fechar" onclick="fecharVideo()">&times; Fechar</span>
+    </div>
+    <iframe id="quadro" src=""></iframe>
+</div>
+
+<script>
+function abrirVideo(endereco){
+    document.getElementById('quadro').src = endereco;
+    document.getElementById('telaVideo').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+function fecharVideo(){
+    document.getElementById('telaVideo').style.display = 'none';
+    document.getElementById('quadro').src = '';
+    document.body.style.overflow = 'auto';
+}
+function filtrar(tipo){
+    document.querySelectorAll('.cat').forEach(c=>c.classList.remove('ativo'));
+    event.target.classList.add('ativo');
+    document.querySelectorAll('.item').forEach(i=>{
+        i.classList.remove('esconder');
+        if(i.dataset.tipo !== tipo) i.classList.add('esconder');
+    });
+}
+function mostrarTudo(){
+    document.querySelectorAll('.cat').forEach(c=>c.classList.remove('ativo'));
+    event.target.classList.add('ativo');
+    document.querySelectorAll('.item').forEach(i=>i.classList.remove('esconder'));
+}
+document.getElementById('busca').addEventListener('input', function(){
+    let texto = this.value.toLowerCase();
+    document.querySelectorAll('.item').forEach(i=>{
+        let nome = i.textContent.toLowerCase();
+        i.classList.toggle('esconder', !nome.includes(texto));
+    });
+});
+</script>
+
+</body>
+</html>
